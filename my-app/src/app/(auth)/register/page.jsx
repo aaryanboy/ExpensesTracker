@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import axios from "axios";
 import Link from "next/link";
 import { useState } from "react";
@@ -14,12 +15,27 @@ export default function Register() {
     const handleSubmit= async (e)=>{
         e.preventDefault()
         console.log({ name, email, password }); 
-        const response = await axios.post('/api/register', {
+        try {
+          const response = await axios.post('/api/register', {
             name,
             email,
             password,
             confirmPassword
-        });
+          });
+          console.log("Registration successful:", response.data);
+        } catch (error) {
+          if (error.response) {
+            // Server responded with a status code outside 2xx
+            console.log("Server responded with error:", error.response.data);
+          } else if (error.request) {
+            // Request was made but no response received
+            console.log("No response received:", error.request);
+          } else {
+            // Something else caused the error
+            console.log("Error setting up request:", error.message);
+          }
+        }
+        
 
     }
 
@@ -29,6 +45,8 @@ export default function Register() {
         <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+
+          
         <div>
             <label htmlFor="name" className="block mb-1 font-medium">Name</label>
             <input

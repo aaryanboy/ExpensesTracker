@@ -1,37 +1,41 @@
 import { NextResponse } from "next/server";
-import User from "@/models/User";
-import connectToDatabase from "@/lib/db";
+import connectToDatabase from "@/lib/db.js";
+import User from "@/models/User.js";
 
-export async function POST(request) {
+export async function POST(req) {
   try {
+    // Connect to DB
     await connectToDatabase();
 
-    const { name, email, password, confirmPassword } = await request.json();
+    // Parse JSON body
+    const body = await req.json();
+    console.log("Received data:", body);
 
-    if (!name || !email || !password || !confirmPassword) {
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
-    }
+    const { name, email, password } = body;
 
+    // Optional: check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return NextResponse.json({ error: "User already exists" }, { status: 400 });
+      return NextResponse.json(
+        { error: "User already exists" },
+        { status: 400 }
+      );
     }
 
-    const hashedPassword = password; // Replace with actual hashing logic
-
-    console.log({ name, email, password, confirmPassword });
-
-    const newUser = new User({
-      username: name,
-      email,
-      password: hashedPassword,
-    });
-
+    // Save new user
+    const newUser = new User({ username:name, email, password }); // You can hash password here
     await newUser.save();
 
-    return NextResponse.json({ message: "User registered successfully" }, { status: 201 });
+    return NextResponse.json(
+      { message: "User stored successfully", data: newUser },
+      { status: 201 }
+    );
+
   } catch (error) {
-    console.error("Registration error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    console.error("Error storing user:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
