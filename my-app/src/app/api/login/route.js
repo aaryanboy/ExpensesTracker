@@ -20,6 +20,7 @@ export async function POST(req) {
         { error: "User doesnt exists" },
         { status: 400 }
       );
+      
     }
 
     // // Save new user
