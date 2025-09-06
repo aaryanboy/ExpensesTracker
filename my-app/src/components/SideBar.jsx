@@ -14,18 +14,19 @@ const Sidebar = ({ isLoggedIn, handleLogout }) => {
 
   const loggedInLinks = [
     { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Transactions', path: '/transactions' },
-    { name: 'Budget', path: '/budget' },
-    { name: 'Reports', path: '/reports' },
-    { name: 'Settings', path: '/settings' },
+    { name: 'income', path: '/transactions' },
+    { name: 'expenses', path: '/budget' },
+    { name: 'reminders', path: '/reports' },
+    { name: 'budget', path: '/settings' },
+    { name: 'settings', path: '/settings' },
+    { name: 'buy me a coffee', path: '/contact' },
   ];
 
   const loggedOutLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Features', path: '/features' },
-    { name: 'Pricing', path: '/pricing' },
     { name: 'About', path: '/about' },
     { name: 'Contact', path: '/contact' },
+    { name: 'Buy me a Coffee', path: '/contact' },
   ];
 
   return (
@@ -36,7 +37,7 @@ const Sidebar = ({ isLoggedIn, handleLogout }) => {
       <img src={logoUrl} alt="Logo" className="w-10" />
 
       <ThemeDropdown />
-      
+
     </div>
 
       {/* Middle Links */}
