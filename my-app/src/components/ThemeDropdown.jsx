@@ -43,7 +43,7 @@ const ThemeDropdown = () => {
               width={14}
               height={24}
             />
-            <span className={`${theme.text} text-xs font-medium `}>LigntMode</span>
+            <span className={`${theme.text} text-xs  `}>LigntMode</span>
           </div>
 
           {/* Dark Mode */}
@@ -60,7 +60,7 @@ const ThemeDropdown = () => {
               width={14}
               height={24}
             /> 
-           <span className={`${theme.text} text-xs font-medium `}>DarkMode</span>
+           <span className={`${theme.text} text-xs  `}>DarkMode</span>
           </div>
         </div>
       )}

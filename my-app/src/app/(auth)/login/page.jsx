@@ -4,10 +4,14 @@
 import Link from "next/link";
 import axios from "axios";
 import { useState } from "react";
+import { useTheme } from "@/app/(theme)/ThemeContext";
 
 
 
 export default function Login() {
+
+  const { theme } = useTheme();
+
 
     const [email,setEmail]=useState("");
     const [password,setPassword]=useState("");
@@ -41,8 +45,8 @@ export default function Login() {
 
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className={`flex items-center justify-center min-h-screen ${theme.background}`}>
+      <div className={`${theme.card} p-8 rounded-lg shadow-md w-full max-w-md ${theme.text}`}>
         <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -69,11 +73,11 @@ export default function Login() {
           <div className="flex items-center justify-between mt-6">
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+              className={`${theme.button}  px-4 py-2 rounded ${theme.buttonHover} ${theme.textHover} transition`}
             >
               Login
             </button>
-            <Link href="/register" className="text-blue-500 hover:underline">
+            <Link href="/register" className={`${theme.link} hover:underline`}>
               or register here
             </Link>
           </div>
