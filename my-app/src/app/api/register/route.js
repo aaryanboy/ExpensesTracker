@@ -22,6 +22,10 @@ export async function POST(req) {
       );
     }
 
+
+    // regez codwe??
+
+    
     // Save new user
     const newUser = new User({ username:name, email, password }); // You can hash password here
     await newUser.save();

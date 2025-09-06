@@ -1,7 +1,16 @@
+"use client"
+
 import Link from "next/link";
 
+import ThemeDropdown from "./ThemeDropdown";
+import { useTheme } from "@/app/(theme)/ThemeContext";
+
+
+
 const Sidebar = ({ isLoggedIn, handleLogout }) => {
-  const logoUrl = '/path/to/logo.png';
+  const { theme } = useTheme();
+
+  const logoUrl = '/logo.svg';
 
   const loggedInLinks = [
     { name: 'Dashboard', path: '/dashboard' },
@@ -20,16 +29,20 @@ const Sidebar = ({ isLoggedIn, handleLogout }) => {
   ];
 
   return (
-    <div className="flex flex-col justify-between h-screen w-56 bg-gray-800 text-white p-6">
+    <div className={`flex flex-col justify-between h-screen w-56 ${theme.sidebar} ${theme.text} p-6`}>
       {/* Logo */}
-      <div className="mb-10">
-        <img src={logoUrl} alt="Logo" className="w-36 mx-auto" />
-      </div>
+      <div className="flex justify-between items-center w-full">
+
+      <img src={logoUrl} alt="Logo" className="w-10" />
+
+      <ThemeDropdown />
+      
+    </div>
 
       {/* Middle Links */}
       <div className="flex flex-col space-y-4">
         {(isLoggedIn ? loggedInLinks : loggedOutLinks).map((link) => (
-          <Link key={link.name} href={link.path} className="px-4 py-2 rounded hover:bg-yellow-500 hover:text-black transition">
+          <Link key={link.name} href={link.path} className={`px-4 py-2 rounded ${theme.buttonHover} hover:text-black transition`}>
             {link.name}
           </Link>
         ))}
