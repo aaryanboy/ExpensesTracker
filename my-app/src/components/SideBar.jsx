@@ -40,7 +40,7 @@ const Sidebar = ({ isLoggedIn, handleLogout }) => {
 
       {/* Middle Links */}
       <div className="flex flex-col space-y-4 text-xs">
-        {(isLoggedIn ?  loggedOutLinks: loggedInLinks).map((link) => (
+        {(isLoggedIn ? loggedInLinks : loggedOutLinks).map((link) => (
           <Link key={link.name} href={link.path} className={`px-4 py-2 rounded ${theme.buttonHover} ${theme.textHover} transition`}>
             {link.name}
           </Link>
