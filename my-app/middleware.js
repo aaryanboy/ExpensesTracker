@@ -1,22 +1,18 @@
-import { headers } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
+export async function middleware(req) {
+  const session = req.cookies.get("session")?.value;
 
-export function middleware(NextRequest, NextResponse) {
-  const response = NextResponse.next({
-    request: {
-        headers: new Headers(req.headers),
+  // Protect dashboard and profile routes
+  if (req.nextUrl.pathname.startsWith("/dashboard") || req.nextUrl.pathname.startsWith("/profile")) {
+    if (!session) {
+      return NextResponse.redirect(new URL("/login", req.url));
     }
-  });
-  
-  response.cookies.set('isAuthed2','true')
-  console.log('Middleware executed, cookie set.', response.cookies  );
-
+  }
 
   return NextResponse.next();
-
 }
 
 export const config = {
-  matcher: '/',
+  matcher: ["/dashboard/:path*", "/profile/:path*"],
 };

@@ -10,6 +10,8 @@ import { useTheme } from "@/app/(theme)/ThemeContext";
 const Sidebar = ({ isLoggedIn, handleLogout }) => {
   const { theme } = useTheme();
 
+  
+
 
   const loggedInLinks = [
     { name: 'Dashboard', path: '/dashboard' },

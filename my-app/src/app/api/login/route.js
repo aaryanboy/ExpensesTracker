@@ -1,45 +1,49 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/db.js";
 import User from "@/models/User.js";
+import crypto from "crypto";
 
 export async function POST(req) {
   try {
-    // Connect to DB
     await connectToDatabase();
 
-    // Parse JSON body
     const body = await req.json();
-    console.log("Received data:", body);
+    const { email, password } = body;
 
-    const {  email, password } = body;
-
-    // Optional: check if user already exists
+    // Check if user exists
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
-      return NextResponse.json(
-        { error: "User doesnt exists" },
-        { status: 400 }
-      );
-      
-      
+      return NextResponse.json({ error: "User doesn't exist" }, { status: 400 });
     }
 
-    
+    // TODO: add real password check (e.g. bcrypt.compare)
+    if (password !== existingUser.password) {
+      return NextResponse.json({ error: "Invalid password" }, { status: 401 });
+    }
 
-    // // Save new user
-    // const newUser = new User({ username:name, email, password }); // You can hash password here
-    // await newUser.save();
+    // Generate random session token
+    const token = crypto.randomBytes(16).toString("hex");
 
-    return NextResponse.json(
-      { message: "User stored successfully",  },
-      { status: 201 }
+    // Save session token in DB (optional, good for security)
+    existingUser.sessionToken = token;
+    await existingUser.save();
+
+    // Send response with cookie
+    const response = NextResponse.json(
+      { message: "Login successful", user: { email: existingUser.email } },
+      { status: 200 }
     );
 
+    response.cookies.set("session", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24, // 1 day
+    });
+
+    return response;
   } catch (error) {
-    console.error("Error storing user:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("Error logging in:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
